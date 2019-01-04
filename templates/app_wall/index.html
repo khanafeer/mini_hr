@@ -1,0 +1,384 @@
+{% include "app_wall/head.html" %}
+<center><h1>Employee Dashboard</h1><hr></center>
+<div class="container-fluid" id="top_buttons_div" >
+      <div class="row text-center" id="top_buttons">
+          <button class="btn btn-primary" data-toggle="modal" data-target="#employee_modal" type="submit"><i class="fa fa-user"></i> Add</button>
+          <button class="btn btn-primary" type="submit" id="export_btn"><i class="fa fa-file-export"></i> Export</button>
+          <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#upload_modal" id="import_btn"><i class="fa fa-file-import"></i> Import</button>
+          <button class="btn btn-primary" data-toggle="modal" data-target="#taxex_table_modal" type="submit"><i class="fa fa-file-invoice-dollar"></i> Taxes</button>
+      </div>
+</div>
+
+<div class="container" id="radio_groups_div">
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="elm_1" name="radio_group" checked>
+        <label class="custom-control-label" for="elm_1">Full Name</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="elm_2" name="radio_group" >
+        <label class="custom-control-label" for="elm_2">National ID</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="elm_3" name="radio_group" >
+        <label class="custom-control-label" for="elm_3">Position</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="elm_4" name="radio_group" >
+        <label class="custom-control-label" for="elm_4">Date of birth</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="elm_5" name="radio_group" >
+        <label class="custom-control-label" for="elm_5">Place of birth</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="elm_6" name="radio_group" >
+        <label class="custom-control-label" for="elm_6">Age</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="elm_7" name="radio_group" >
+        <label class="custom-control-label" for="elm_7">Country</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="elm_8" name="radio_group" >
+        <label class="custom-control-label" for="elm_8">Nationality</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="elm_9" name="radio_group" >
+        <label class="custom-control-label" for="elm_9">Marital Status</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="elm_10" name="radio_group" >
+        <label class="custom-control-label" for="elm_10">Gender</label>
+    </div>
+    <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="elm_11" name="radio_group" >
+        <label class="custom-control-label" for="elm_11">Salary</label>
+    </div>
+    <input type="text" id="search_input" onkeyup="filter_table()" placeholder="Filter Table ..">
+</div>
+
+<div id="div_tbl">
+    <table id="emp_table_body"  class="table table-dark table-striped table-bordered table-hover table-sm">
+      <thead>
+        <tr>
+            <th scope="col" onclick="sortTable(0)">#</th>
+            <th scope="col" onclick="sortTable(1)">Full Name</th>
+            <th scope="col" onclick="sortTable(2)">National Identifier</th>
+            <th scope="col" onclick="sortTable(3)">Position</th>
+            <th scope="col" onclick="sortTable(4)">Date of birth</th>
+            <th scope="col" onclick="sortTable(5)">Age</th>
+            <th scope="col" onclick="sortTable(6)">Place of birth</th>
+            <th scope="col" onclick="sortTable(7)">Country</th>
+            <th scope="col" onclick="sortTable(8)">Nationality</th>
+            <th scope="col" onclick="sortTable(9)">Marital Status</th>
+            <th scope="col" onclick="sortTable(10)">Gender</th>
+            <th scope="col" onclick="sortTable(11)">Salary</th>
+            <th scope="col">Delete</th>
+            <th scope="col">Slip</th>
+            <th scope="col">Earnings</th>
+            <th scope="col">Deductions</th>
+            <th scope="col">Jobs</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="employee_modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Employee</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% load crispy_forms_tags %}
+          {% block content %}
+              <form id="employee_form">
+                {% csrf_token %}
+                {{ form|crispy }}
+              </form>
+          {% endblock %}
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="save_close_btn">Save</button>
+          <button type="button" class="btn btn-primary" id="save_only_btn">Save and Add another</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="taxex_table_modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">All taxes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="tax_div_tbl">
+    <table id="tax_table_body" class="table table-striped table-bordered table-hover table-sm">
+      <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Value</th>
+            <th scope="col">From salary</th>
+            <th scope="col">To salary</th>
+            <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+</div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button class="btn btn-primary" data-toggle="modal" data-target="#taxes_modal" type="submit"><i class="fa fa-plus-circle"></i> Add Tax</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="taxes_modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Taxes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% load crispy_forms_tags %}
+          {% block content2 %}
+              <form id="tax_form">
+                {% csrf_token %}
+                {{ tax_form|crispy }}
+              </form>
+          {% endblock %}
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="tax_add_btn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="upload_modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Upload excel file</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% block content_upload %}
+          <form method="post" action="/import_employee/" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="myfile">
+            <button type="submit">Upload</button>
+          </form>
+        {% endblock %}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="filter_modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Filter Employees</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Search</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="earnings_modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Employee Earnings</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="earnings_form"> {% csrf_token %}
+            <div id="div_id_amount" class="form-group">
+              <label for="id_amount" class="col-form-label  requiredField">Amount :<span class="asteriskField">*</span></label>
+            <input type="number" name="amount" maxlength="45" class="textinput textInput form-control" required="" id="id_amount">
+
+          </div>
+            <div id="div_id_description" class="form-group">
+              <label for="id_description" class="col-form-label  requiredField">Description :<span class="asteriskField">*</span></label>
+            <input type="text" name="description" maxlength="45" class="textinput textInput form-control" required="" id="id_description">
+
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="earn_add_btn">Add Earning</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deductions_modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Employee Deductions</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="deductions_form"> {% csrf_token %}
+            <div id="div_id_amount_d" class="form-group">
+              <label for="id_amount_d" class="col-form-label  requiredField">Amount :<span class="asteriskField">*</span></label>
+            <input type="number" name="amount" maxlength="45" class="textinput textInput form-control" required="" id="id_amount_d">
+
+          </div>
+            <div id="div_id_description_d" class="form-group">
+              <label for="id_description_d" class="col-form-label  requiredField">Description :<span class="asteriskField">*</span></label>
+            <input type="text" name="description" maxlength="45" class="textinput textInput form-control" required="" id="id_description_d">
+
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="deduct_add_btn">Add Deduction</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="jobs_tbl_modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Employee Jobs</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <form id="jobs_form"> {% csrf_token %}
+                <div id="div_id_describtion" class="form-group">
+                    <label for="id_describtion" class="col-form-label  requiredField">Job Describtion :<span class="asteriskField">*</span></label>
+                    <input type="text" name="describtion" maxlength="150" class="textinput textInput form-control" required="" id="id_describtion">
+                    <button type="button" class="btn btn-primary" id="job_add_btn">Add Job</button>
+                </div>
+            </form>
+          <h4>Current Jobs</h4>
+          <table id="jobs_table_body" class="table table-striped table-bordered table-hover table-sm">
+              <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+          </table>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="report_modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Employee Salary Report</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="slip_body">
+          <div class="container-fluid">
+              <table id="report_table" border="0" width="100%">
+                  <tr><td>Main Salary</td><td id="main_salary"></td></tr>
+                  <tr><td>Deductions</td><td id="deductions"></td></tr>
+                  <tr><td>Earnings</td><td id="earnings"></td></tr>
+                  <tr><td>Total Salary</td><td id="total_salary"></td></tr>
+                  <tr><td>Net Salary</td><td id="net_salary"></td></tr>
+              </table>
+          </div>
+          <hr>
+          <h4>Deductions</h4>
+          <table id="deductions_table_body" class="table table-striped table-bordered table-hover table-sm">
+              <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Value</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+          </table>
+          <h4>Earnings</h4>
+          <table id="earnings_table_body" class="table table-striped table-bordered table-hover table-sm">
+              <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Value</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+          </table>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <input type="email" placeholder="Enter Email Here ..." name="mail_input" maxlength="150" class="textinput textInput form-control" required="" id="mail_input">
+          <button type="button" class="btn btn-primary" id="send_mail">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include "app_wall/footer.html" %}

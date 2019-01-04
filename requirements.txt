@@ -1,0 +1,8 @@
+django
+django-countries
+djangorestframework
+django-crispy-forms
+django-import-export
+xhtml2pdf
+django-easy-pdf
+
