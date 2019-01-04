@@ -1,5 +1,8 @@
 from rest_framework.serializers import ModelSerializer
-from main_app.models import Employee,EmployeeEarning,EmployeeDeduction,Taxes,EmployeeJops
+
+from main_app.models import (Employee, EmployeeDeduction, EmployeeEarning,
+                             EmployeeJops, Taxes)
+
 
 class EmployeeSerializer(ModelSerializer):
     class Meta:

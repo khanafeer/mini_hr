@@ -1,8 +1,9 @@
+from datetime import date
+
 from django.db import models
 from django.db.models import Sum
-
 from django_countries.fields import CountryField
-from datetime import date
+
 
 class Employee(models.Model):
     GENDER_CHOICES = (
@@ -23,7 +24,7 @@ class Employee(models.Model):
     main_salary = models.FloatField(default=0)
 
     def get_full_name(self):
-        return " ".join([self.first_name,self.middle_name,self.last_name])
+        return " ".join([self.first_name, self.middle_name, self.last_name])
 
     def get_age(self):
         today = date.today()
@@ -45,12 +46,12 @@ class Employee(models.Model):
 
     def get_tottals(self,month):
         try:
-            total_earnings = EmployeeEarning.objects.filter(date__month=month,employee=self).aggregate(Sum('amount')).get('amount__sum')
+            total_earnings = EmployeeEarning.objects.filter(date__month=month, employee=self).aggregate(Sum('amount')).get('amount__sum')
         except:
             total_earnings = 0
 
         try:
-            total_deductions = EmployeeDeduction.objects.filter(date__month=month,employee=self).aggregate(Sum('amount')).get('amount__sum')
+            total_deductions = EmployeeDeduction.objects.filter(date__month=month, employee=self).aggregate(Sum('amount')).get('amount__sum')
         except:
             total_deductions = 0
 
@@ -102,4 +103,3 @@ class EmployeeJops(models.Model):
 
     def __str__(self):
         return "{} {}.".format(self.employee.first_name,self.description[:15])
-

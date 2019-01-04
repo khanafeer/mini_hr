@@ -1,14 +1,20 @@
-from rest_framework.viewsets import ModelViewSet
-from main_app.serializers import EmployeeSerializer,EmployeeDeductionSerializer,EmployeeEarningSerializer,TaxesSerializer,EmployeeJopsSerializer
-from main_app.models import Employee,EmployeeEarning,EmployeeDeduction,Taxes,EmployeeJops
-from django.template import Template, Context
+import json
 
+from django.core.mail import EmailMessage
+from django.template import Context, Template
+from easy_pdf.rendering import render_to_pdf
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
-import json
-from easy_pdf.rendering import render_to_pdf
-from django.core.mail import EmailMessage
+from rest_framework.viewsets import ModelViewSet
+
+from main_app.models import (Employee, EmployeeDeduction, EmployeeEarning,
+                             EmployeeJops, Taxes)
+from main_app.serializers import (EmployeeDeductionSerializer,
+                                  EmployeeEarningSerializer,
+                                  EmployeeJopsSerializer, EmployeeSerializer,
+                                  TaxesSerializer)
+
 
 class EmployeViewset(ModelViewSet):
     queryset = Employee.objects.all()
@@ -113,5 +119,3 @@ def send_slip(request,emp_id,mail,month=1):
         msg.content_subtype = "html"
         msg.send()
         return Response(status.HTTP_200_OK)
-
-

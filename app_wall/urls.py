@@ -1,6 +1,6 @@
-from app_wall.views import index
-from django.urls import path,include
-from app_wall.views import export_employee,simple_upload
+from django.urls import path
+
+from app_wall.views import export_employee, index, simple_upload
 
 urlpatterns = [
     path('', index),
@@ -8,6 +8,3 @@ urlpatterns = [
     path('import_employee/', simple_upload),
 
 ]
-
-
-
