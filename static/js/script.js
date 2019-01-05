@@ -384,5 +384,14 @@ function filter_table() {
 
 function send_mail(){
     var mail = $('#mail_input').val()
-    $.get('/api/send_slip_mail/'+employee_id+'/'+mail+'/')
+    $.get('/api/send_slip_mail/'+employee_id+'/'+mail+'/',function(data,status){
+        console.log(data)
+        if (data=='200'){
+            alert("mail sent successfully")
+            $('#report_modal').modal('toggle')
+        }
+        else{
+            alert('enter a valid email address')
+        }
+    })
 }

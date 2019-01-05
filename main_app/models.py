@@ -47,11 +47,13 @@ class Employee(models.Model):
     def get_tottals(self,month):
         try:
             total_earnings = EmployeeEarning.objects.filter(date__month=month, employee=self).aggregate(Sum('amount')).get('amount__sum')
+            if not total_earnings:total_earnings = 0
         except:
             total_earnings = 0
 
         try:
             total_deductions = EmployeeDeduction.objects.filter(date__month=month, employee=self).aggregate(Sum('amount')).get('amount__sum')
+            if not total_deductions:total_deductions=0
         except:
             total_deductions = 0
 

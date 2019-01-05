@@ -81,6 +81,7 @@ def emp_salary_slip(request,emp_id,month):
 
 @api_view(['GET'])
 def send_slip(request,emp_id,mail,month=1):
+    try:
         emp = Employee.objects.get(pk=emp_id)
         main_salary = emp.main_salary
         total_salary = emp.get_tottal_salary(month)
@@ -108,3 +109,5 @@ def send_slip(request,emp_id,mail,month=1):
         msg.content_subtype = "html"
         msg.send()
         return Response(status.HTTP_200_OK)
+    except:
+        return Response(status.HTTP_404_NOT_FOUND)
