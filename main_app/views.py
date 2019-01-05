@@ -44,12 +44,11 @@ def emp_jobs(request,emp_id):
         return Response(status.HTTP_400_BAD_REQUEST)
     try:
         q = EmployeeJops.objects.filter(employee=emp)
-        print(q)
         ser = EmployeeJopsSerializer(q,many=True)
         return Response(ser.data,status.HTTP_200_OK)
 
     except Exception as ex:
-        print(ex)
+        pass
     return Response(status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
@@ -63,26 +62,21 @@ def emp_salary_slip(request,emp_id,month):
 
         try:
             s1 = EmployeeEarning.objects.filter(date__month=month,employee=emp)
-            print(s1)
             s = EmployeeEarningSerializer(s1,many=True)
             earnings = s.data
         except Exception as ex:
-            print("sss",ex)
             earnings = []
 
         try:
             d1 = EmployeeDeduction.objects.filter(date__month=month,employee=emp)
-            print(d1)
             d = EmployeeDeductionSerializer(d1,many=True)
             deductions = d.data
         except Exception as ex:
-            print("ddd",ex)
             deductions = []
 
         data = {'main_salary':main_salary,'total_salary':total_salary,'net_salary':net_salary,'total_earnings':total_earnings,'total_deductions':total_deductions,'earnings':earnings,'deductions':deductions}
         return Response(json.dumps(data),status.HTTP_200_OK)
     except Exception as ex:
-        print(ex)
         return Response(status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
@@ -95,25 +89,20 @@ def send_slip(request,emp_id,mail,month=1):
 
         try:
             s1 = EmployeeEarning.objects.filter(date__month=month,employee=emp)
-            print(s1)
             s = EmployeeEarningSerializer(s1,many=True)
             earnings = s.data
         except Exception as ex:
-            print("sss",ex)
             earnings = []
 
         try:
             d1 = EmployeeDeduction.objects.filter(date__month=month,employee=emp)
-            print(d1)
             d = EmployeeDeductionSerializer(d1,many=True)
             deductions = d.data
         except Exception as ex:
-            print("ddd",ex)
             deductions = []
 
         data = {'main_salary':main_salary,'total_salary':total_salary,'net_salary':net_salary,'total_earnings':total_earnings,'total_deductions':total_deductions,'earnings':earnings,'deductions':deductions}
         post_pdf = render_to_pdf('app_wall/slip.html',data)
-        print(mail)
         msg = EmailMessage("Employee Slip", "this slip for {}".format(emp.get_full_name()), to=[mail])
         msg.attach('file.pdf', post_pdf, 'application/pdf')
         msg.content_subtype = "html"

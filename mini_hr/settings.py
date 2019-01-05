@@ -13,7 +13,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.mail.yahoo.com'
 DEFAULT_FROM_EMAIL = 'naser_khanafeer@yahoo.com'
 EMAIL_HOST_USER = 'naser_khanafeer'
-EMAIL_HOST_PASSWORD = '****'
+EMAIL_HOST_PASSWORD = '*-N01014818459*-'
 EMAIL_PORT = 587
 
 

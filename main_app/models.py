@@ -14,13 +14,13 @@ class Employee(models.Model):
     middle_name = models.CharField(max_length=45)
     last_name = models.CharField(max_length=45)
     national_id = models.CharField(max_length=14)
-    job_position = models.CharField(max_length=100)
+    job_position = models.CharField(max_length=100,null=True)
     date_of_birth = models.DateField(null=True)
     place_of_birth = models.CharField(max_length=45,null=True)
-    country = CountryField()
-    nationality = CountryField()
-    martial_status = models.CharField(max_length=45)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    country = CountryField(default='EG')
+    nationality = CountryField(default='EG')
+    martial_status = models.CharField(max_length=45,null=True)
+    gender = models.CharField(max_length=1,default='M', choices=GENDER_CHOICES)
     main_salary = models.FloatField(default=0)
 
     def get_full_name(self):
